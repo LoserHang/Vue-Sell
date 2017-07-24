@@ -1,4 +1,4 @@
-border-lpx($color)
+border-1px($color)
   position: relative
   &:after
     display: block
@@ -8,6 +8,10 @@ border-lpx($color)
     width: 100%
     border-top: 1px solid $color
     content: ' '
+
+border-none()
+  &:after
+    display: none
 
 bg-image($url)
   background-image: url($url+"@2x.png")
