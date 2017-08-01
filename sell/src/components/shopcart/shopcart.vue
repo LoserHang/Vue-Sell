@@ -1,6 +1,6 @@
 <template>
   <div class="shopcart">
-    <div class="content">
+    <div class="content" @click="toggleList">
       <div class="content-left">
         <div class="logo-wrapper">
           <div class="logo" :class="{'highlight':totalCount>0}">
@@ -17,10 +17,38 @@
         </div>
       </div>
     </div>
+    <div class="ball-container">
+      <div transition="drop" v-for="ball in balls" v-show="ball.show"
+           class="ball"></div>
+      <div class="inner"></div>
+    </div>
+    <transition name="fold">
+      <div class="shopcart-list" v-show="listShow">
+        <div class="list-header">
+          <h1 class="title">购物车</h1>
+          <span class="empty">清空</span>
+        </div>
+        <div class="list-content">
+          <ul>
+            <li class="food" v-for="food in selectFoods">
+              <span class="name">{{ food.name }}</span>
+              <div class="price">
+                <span>¥{{ food.price*food.count }}</span>
+              </div>
+              <div class="cartcontrol-wrapper">
+                <cartcontrol :food="food"></cartcontrol>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+  import cartcontrol from 'components/cartcontrol/carcontrol.vue';
+
   export default {
     props: {
       selectFoods: {
@@ -41,22 +69,30 @@
         default: 0
       }
     },
-  computed: {
-    totalPrice () {
+    data() {
+      return {
+        balls: [{
+          show: false
+        }],
+        fold: true
+      };
+    },
+    computed: {
+      totalPrice () {
       let total = 0;
       this.selectFoods.forEach((food) => {
         total += food.price * food.count;
       });
       return total;
-    },
-    totalCount () {
+      },
+      totalCount () {
       let count = 0;
       this.selectFoods.forEach((food) => {
         count += food.count;
       });
       return count;
-    },
-    payDesc() {
+      },
+      payDesc() {
       if (this.totalPrice === 0) {
         return `¥${this.minPrice}元起送`;
       } else if (this.totalPrice < this.minPrice) {
@@ -65,14 +101,42 @@
       } else {
         return '去结算';
       }
-    },
-    payClass() {
+      },
+      payClass() {
       if (this.totalPrice < this.minPrice) {
         return 'not-enough';
       } else {
         return 'enough';
       }
-    }
+    },
+      listShow() {
+        if (!this.totalCount) {
+          this.fold = true;
+          return false;
+        }
+        let show = !this.fold;
+        return show;
+      }
+    },
+    methods: {
+      drop(el) {
+        for (let i = 0; i < this.balls.length; i++) {
+          let ball = this.balls[i];
+          if (!ball.show) {
+            ball.show = true;
+            ball.el = el;
+          }
+        }
+      },
+      toggleList() {
+        if (!this.totalCount) {
+          return;
+        }
+        this.fold = !this.fold;
+      }
+    },
+    components: {
+      cartcontrol
     }
   };
 </script>
@@ -164,4 +228,49 @@
           &.enough
             background: #00b43c
             color: #fff
+    /*.ball-container
+      .ball
+        position: fixed
+        left: 32px
+        bottom: 22px
+        z-index: 200
+        &.drop-transition
+          transition: all 0.4s
+          .inner
+            width: 16px
+            height: 16px
+            border-radius: 50%
+            background: rgb(0, 160, 220)
+            transition: all 0.4s */
+    .shopcart-list
+      position: absolute
+      left: 0
+      top: 0
+      z-index: -1
+      width: 100%
+      &.fold-transition
+        transition: all 0.5s
+        transform: translate3d(0, -100%, 0)
+      &.fold-enter, &.fold-leave
+        transform: translate3d(0, 0, 0)
+      .list-header
+        height: 40px
+        line-height: 40px
+        padding: 0 18px
+        background: #f3f5f7
+        border-bottom: 1px solid rgba(7, 17, 27, 0.1)
+        .title
+          float: left
+          font-size: 14px
+          color: rgb(7, 17, 27)
+        .empty
+          float: right
+          font-size: 12px
+          color: rgb(0, 160, 220)
+
+      .list-content
+        padding: 0 18px
+        max-height: 217px
+        overflow: hidden
+        background: #fff
 </style>
