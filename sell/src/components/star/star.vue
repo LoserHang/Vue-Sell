@@ -1,6 +1,6 @@
 <template>
   <div class="star" :class="starType">
-      <span v-for="(itemClass, index) in itemClasses" :class="itemClass" 
+      <span v-for="(itemClass, index) in itemClasses" :class="itemClass"
       class="star-item" key="index"></span>
   </div>
 </template>
@@ -93,5 +93,5 @@
           bg-image('star24_half')
         &.off
           bg-image('star24_off')
-    
+
 </style>

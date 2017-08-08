@@ -68,6 +68,7 @@
 
  <script type="text/ecmascript-6">
   import star from 'components/star/star';
+
   export default {
     props: {
       seller: {
@@ -179,7 +180,7 @@
       position: relative
       height: 28px
       line-height: 28px
-      padding: 0 22px 0 12px
+      padding: 0 21px 0 12px
       white-space: nowrap
       overflow: hidden
       text-overflow: ellipsis
@@ -240,7 +241,7 @@
             font-weight: 700
           .star-wrapper
             margin-top: 18px
-            padding: 2px 0px
+            padding: 2px 0
             text-align: center
           .title
             display: flex
