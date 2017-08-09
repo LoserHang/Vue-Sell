@@ -67,7 +67,6 @@
         if (!event._constructed) {
           return;
         }
-        this.selectType = type;
         this.$emit('select', type);
       },
       toggleContent (event) {
