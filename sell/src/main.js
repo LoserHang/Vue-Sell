@@ -13,13 +13,20 @@ import 'common/stylus/index.styl';
 Vue.use(VueRouter);
 Vue.use(VueResource);
 
-Vue.config.productionTip = false;
+Vue.config.productionTip = true;
 
-const routes = [
-  {path: '/', component: goods},
-  {path: '/goods', component: goods},
-  {path: '/ratings', component: ratings},
-  {path: '/seller', component: seller}
+const routes = [{
+  path: '/', component: goods
+  },
+  {
+    path: '/goods', component: goods
+  },
+  {
+    path: '/ratings', component: ratings
+  },
+  {
+    path: '/seller', component: seller
+  }
 ];
 
 const router = new VueRouter({
